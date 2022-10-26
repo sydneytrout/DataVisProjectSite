@@ -4,7 +4,7 @@ import { MenuBar } from "./Menubar";
 export function Projects() {
   return (
     <>
-      <MenuBar currentState={0} />
+      <p>hello2</p>
     </>
   );
 }

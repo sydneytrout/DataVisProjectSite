@@ -7,7 +7,7 @@ export function Blog({ currentState = 0 }) {
   const [currentBlog, setCurrentBlog] = useState(currentState);
   return (
     <>
-      <MenuBar currentState={2} />
+      <p>hellow</p>
     </>
   );
 }

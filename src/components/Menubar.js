@@ -1,12 +1,21 @@
 /** @format */
 
 import { useState } from "react";
-import { Home } from "./components/Home";
+import { Home } from "./Home";
+import { Projects } from "./Projects";
+import { Resume } from "./Resume";
+import { Blog } from "./Blog";
 
 function renderSwitch(coolState) {
   switch (coolState) {
-    case 1:
+    case 3:
       return <Home />;
+    case 0:
+      return <Projects />;
+    case 1:
+      return <Resume />;
+    case 2:
+      return <Blog />;
   }
 }
 
@@ -72,6 +81,7 @@ export function MenuBar({ currentState = 3 }) {
           </div>
         </div>
       </div>
+
       {renderSwitch(coolState)}
     </>
   );
