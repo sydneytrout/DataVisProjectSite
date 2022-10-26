@@ -14,15 +14,7 @@ import { Home } from "./components/Home";
 function App() {
   return (
     <div className="font-mono">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="blog" element={<Blog />} />
-          <Route path="resume" element={<Resume />} />
-          <Route path="projects" element={<Projects />} />
-          <Route path="blog/tar_pit" element={<Blog currentState={1} />} />
-        </Routes>
-      </BrowserRouter>
+      <Home />
     </div>
   );
 }
