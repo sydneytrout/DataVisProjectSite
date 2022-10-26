@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/DataVisProjectSite/static/css/main.069348fe.css",
-    "main.js": "/DataVisProjectSite/static/js/main.af430668.js",
-    "static/js/787.f5d236e4.chunk.js": "/DataVisProjectSite/static/js/787.f5d236e4.chunk.js",
-    "index.html": "/DataVisProjectSite/index.html",
-    "main.069348fe.css.map": "/DataVisProjectSite/static/css/main.069348fe.css.map",
-    "main.af430668.js.map": "/DataVisProjectSite/static/js/main.af430668.js.map",
-    "787.f5d236e4.chunk.js.map": "/DataVisProjectSite/static/js/787.f5d236e4.chunk.js.map"
+    "main.css": "/static/css/main.069348fe.css",
+    "main.js": "/static/js/main.a57119aa.js",
+    "static/js/787.f5d236e4.chunk.js": "/static/js/787.f5d236e4.chunk.js",
+    "static/media/logo.svg": "/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/index.html",
+    "main.069348fe.css.map": "/static/css/main.069348fe.css.map",
+    "main.a57119aa.js.map": "/static/js/main.a57119aa.js.map",
+    "787.f5d236e4.chunk.js.map": "/static/js/787.f5d236e4.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.069348fe.css",
-    "static/js/main.af430668.js"
+    "static/js/main.a57119aa.js"
   ]
 }
