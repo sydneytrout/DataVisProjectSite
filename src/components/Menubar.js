@@ -10,7 +10,7 @@ export function MenuBar({ currentState = 3 }) {
     <>
       <div className="bg-orange-300 flex flex-row">
         <div className=" bg-orange-300 basis-3/4 py-2 pl-4 ">
-          <p className="">Clemson Grade Distributions, Visualized</p>
+          <p className="">Clemson Grade Distributions, Visualizedd</p>
         </div>
         <div className=" bg-orange-300 basis-1/4">
           <div className="flex flex-row justify-end">
