@@ -1,7 +1,6 @@
 /** @format */
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
 export function MenuBar({ currentState = 3 }) {
   const [coolState, setCoolState] = useState(currentState);
