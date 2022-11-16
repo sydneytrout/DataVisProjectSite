@@ -1,8 +1,8 @@
 /** @format */
-var departmentGraph;
-function genLevelChart(semNum, selectedCourse) {
-  if (departmentGraph !== undefined) {
-    departmentGraph.selectAll("*").remove();
+var profGraph;
+function genProfChart(data, courseLevel) {
+  if (profGraph !== undefined) {
+    profGraph.selectAll("*").remove();
   }
   Promise.all([
     d3.csv("refined_data/2013f.csv"),
@@ -25,8 +25,14 @@ function genLevelChart(semNum, selectedCourse) {
     d3.csv("refined_data/2022s.csv"),
   ]).then(function (files) {
     var size = d3.min([window.innerWidth * 1.5, window.innerHeight * 1.5]);
+    var divisor = data[courseLevel].length;
+    if (divisor < 5) {
+      divisor = 4;
+    } else {
+      divisor = 1;
+    }
     var dimensions = {
-      width: size / 2,
+      width: size / divisor,
       height: size / 3,
       margin: {
         top: 10,
@@ -35,35 +41,15 @@ function genLevelChart(semNum, selectedCourse) {
         left: 100,
       },
     };
-    var dataset = files[semNum];
+
+    var dataset = data[courseLevel];
     for (course in dataset) {
-      if (dataset[course].Course !== selectedCourse) {
-        delete dataset[course];
-      }
+      dataset[course].gpa = condenseCourse(dataset[course]);
     }
-
-    var actualData = new Array(10);
-    for (i = 0; i < 10; i++) {
-      actualData[i] = [];
-    }
-    for (course in dataset) {
-      actualData[Math.floor(dataset[course].Numbe / 1000 - 1)].push(
-        dataset[course]
-      );
-    }
-
-    var temp = [];
-    for (level in actualData) {
-      var condensed = condenseLevel(actualData, level);
-      if (condensed > 0) {
-        temp.push({ level: level, gpa: condensed });
-      }
-    }
-    dataset = temp;
-    console.log(actualData);
-
+    console.log(dataset);
+    console.log(dataset[0].gpa);
     var svg = d3
-      .select("#subSubBarchart")
+      .select("#subSubSubBarchart")
       .style("width", dimensions.width)
       .style("height", dimensions.height);
 
@@ -77,7 +63,7 @@ function genLevelChart(semNum, selectedCourse) {
       .scaleBand()
       .domain(
         dataset.map(function (d) {
-          return d.level;
+          return d;
         })
       )
       .range([0, dimensions.boundedWidth])
@@ -115,7 +101,7 @@ function genLevelChart(semNum, selectedCourse) {
       .attr("x", dimensions.width / 2)
       .attr("y", dimensions.height)
       .attr("text-anchor", "middle")
-      .text("Course Level");
+      .text("Professors");
 
     //generate primary bar chart
     var bars = bounds
@@ -124,7 +110,7 @@ function genLevelChart(semNum, selectedCourse) {
       .enter()
       .append("rect")
       .attr("x", function (d) {
-        return xScale(d.level);
+        return xScale(d);
       })
       .attr("width", xScale.bandwidth)
       .attr("y", function (d) {
@@ -133,16 +119,7 @@ function genLevelChart(semNum, selectedCourse) {
       .attr("height", function (d) {
         return dimensions.boundedHeight - yScale(d.gpa);
       })
-      .attr("fill", "steelblue")
-      .on("click", function (d, i) {
-        genProfChart(actualData, i.level);
-      })
-      .on("mouseover", function (d, i) {
-        d3.select(this).attr("style", "outline: solid black;");
-      })
-      .on("mouseout", function (d, i) {
-        d3.select(this).attr("style", "outline: none;");
-      });
+      .attr("fill", "steelblue");
 
     //generate secondary bar chart
 
@@ -155,7 +132,8 @@ function genLevelChart(semNum, selectedCourse) {
         })
       )
       .tickFormat(function (d) {
-        return ((parseInt(d) + 1) * 1000).toString();
+        console.log(d);
+        return d.Instructor;
       })
       .tickSizeOuter(0);
 
@@ -175,7 +153,7 @@ function genLevelChart(semNum, selectedCourse) {
       .style("text-anchor", "end")
       .attr("dx", "-.8em")
       .attr("dy", ".15em")
-      .attr("transform", "rotate(-65)");
+      .attr("transform", "rotate(-35)");
 
     //create the yAxis
     var yAxis = d3.axisLeft(yScale);
@@ -191,20 +169,6 @@ function genLevelChart(semNum, selectedCourse) {
           ")"
       )
       .call(yAxis);
-    departmentGraph = svg;
+    profGraph = svg;
   });
-}
-
-function condenseLevel(dataset, level) {
-  let total = 0;
-  let courseCount = 0;
-  for (let i = 0; i < dataset[level].length; i++) {
-    if (convertPct(dataset[level][i]["P"]) === 0) {
-      total += condenseCourse(dataset[level][i]);
-      courseCount++;
-    }
-  }
-  total /= courseCount;
-
-  return total;
 }
