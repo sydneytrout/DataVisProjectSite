@@ -58,7 +58,7 @@ Promise.all([
   dataset[16].name = "2021 Spring";
   dataset[17].name = "2022 Spring";
 
-  // generate initial plane
+  // generate initial planes
   var svg = d3
     .select("#barchart")
     .style("width", dimensions.width)
@@ -69,6 +69,7 @@ Promise.all([
   dimensions.boundedHeight =
     dimensions.height - dimensions.margin.top - dimensions.margin.bottom;
 
+  // set up scales
   var xScale = d3
     .scaleBand()
     .domain(
@@ -80,8 +81,6 @@ Promise.all([
     .padding(0.2);
 
   var yAccessor = (d) => {
-    // console.log(d["A"]);
-    // console.log(convertPct(d["A"]));
     return d.condensed;
   };
 
@@ -90,6 +89,7 @@ Promise.all([
     .domain([0, 4])
     .range([dimensions.boundedHeight, 0]);
 
+  // generate bounds for the bar chart
   var bounds = svg
     .append("g")
     .style(
@@ -97,7 +97,8 @@ Promise.all([
       `translate(${dimensions.margin.left}px, ${dimensions.margin.top}px)`
     );
 
-  var textA = svg
+  // create x and y labels
+  var yLabel = svg
     .append("text")
     .attr("text-anchor", "end")
     .attr("y", 6)
@@ -106,14 +107,14 @@ Promise.all([
     .attr("transform", "rotate(-90)")
     .text("Average GPA");
 
-  var textB = svg
+  var xLabel = svg
     .append("text")
     .attr("x", dimensions.width / 2)
     .attr("y", dimensions.height)
     .attr("text-anchor", "middle")
     .text("Semester");
 
-  //generate initial plane to graph the things on
+  //generate primary bar chart
   var bars = bounds
     .selectAll("bar")
     .data(dataset)
@@ -129,8 +130,17 @@ Promise.all([
     .attr("height", function (d) {
       return dimensions.boundedHeight - yScale(d.condensed);
     })
-    .attr("fill", "steelblue");
+    .attr("fill", "steelblue")
+    .on("mouseover", function (d, i) {
+      d3.select(this).attr("style", "outline: solid black;");
+    })
+    .on("mouseout", function (d, i) {
+      d3.select(this).attr("style", "outline: none;");
+    });
 
+  //generate secondary bar chart
+
+  //create the x axis
   var xAxis = d3
     .axisBottom(xScale)
     .tickValues(
@@ -143,7 +153,7 @@ Promise.all([
     })
     .tickSizeOuter(0);
 
-  //create the xAxis
+  //spawn x axis
   svg
     .append("g")
     .attr(
@@ -161,9 +171,9 @@ Promise.all([
     .attr("dy", ".15em")
     .attr("transform", "rotate(-65)");
 
-  var yAxis = d3.axisLeft(yScale);
   //create the yAxis
-
+  var yAxis = d3.axisLeft(yScale);
+  //spawn y axis
   var changing_axis = svg
     .append("g")
     .attr(
@@ -172,6 +182,7 @@ Promise.all([
     )
     .call(yAxis);
 
+  //functions for swapping the chart style
   d3.select("#zoom").on("click", function () {
     let myCoolExtent = d3.extent(dataset, yAccessor);
     myCoolExtent[0] -= 0.01;
