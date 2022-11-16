@@ -20,29 +20,24 @@ Promise.all([
   d3.csv("refined_data/2021s.csv"),
   d3.csv("refined_data/2022s.csv"),
 ]).then(function (files) {
-  // for (file in files) {
-  //   console.log(files[file]);
-  // }
-  for (file in files) {
-  }
   //dimensions constant
-  const dimensions = {
-    width: 1500,
-    height: 600,
+  var size = d3.min([window.innerWidth * 1.5, window.innerHeight * 1.5]);
+
+  var dimensions = {
+    width: size,
+    height: size / 3,
     margin: {
       top: 10,
-      bottom: 100,
       right: 10,
+      bottom: 100,
       left: 100,
     },
   };
   var dataset = [];
-  var condensedSemesters;
   for (file in files) {
     dataset.push(files[file]);
     dataset[file].semester = file;
     dataset[file].condensed = condneseSemester(files[file]);
-    console.log("final: ", dataset[file].condensed);
   }
   dataset[0].name = "2013 Fall";
   dataset[1].name = "2014 Fall";
@@ -62,94 +57,64 @@ Promise.all([
   dataset[15].name = "2021 Fall";
   dataset[16].name = "2021 Spring";
   dataset[17].name = "2022 Spring";
-  for (file in dataset) {
-    console.log(dataset[file].semester);
-    console.log(dataset[file]);
-  }
 
-  // delete dataset["columns"];
-  // for (item in dataset) {
-  //   if (dataset[item].Instructor === "") {
-  //     console.log(item);
-  //     console.log(dataset[item]);
-  //   }
-  // }
+  // generate initial plane
+  var svg = d3
+    .select("#barchart")
+    .style("width", dimensions.width)
+    .style("height", dimensions.height);
 
-  //retrieve data being displayed
+  dimensions.boundedWidth =
+    dimensions.width - dimensions.margin.right - dimensions.margin.left;
+  dimensions.boundedHeight =
+    dimensions.height - dimensions.margin.top - dimensions.margin.bottom;
+
+  var xScale = d3
+    .scaleBand()
+    .domain(
+      dataset.map(function (d) {
+        return d.semester;
+      })
+    )
+    .range([0, dimensions.boundedWidth])
+    .padding(0.2);
+
   var yAccessor = (d) => {
     // console.log(d["A"]);
     // console.log(convertPct(d["A"]));
     return d.condensed;
   };
 
-  //generate initial plane to graph the things on
-  var svg = d3
-    .select("#barchart")
-    .attr(
-      "width",
-      dimensions.width + dimensions.margin.left + dimensions.margin.right
-    )
-    .attr(
-      "height",
-      dimensions.height + dimensions.margin.top + dimensions.margin.bottom
-    )
+  var yScale = d3
+    .scaleLinear()
+    .domain([0, 4])
+    .range([dimensions.boundedHeight, 0]);
+
+  var bounds = svg
     .append("g")
-    .attr(
+    .style(
       "transform",
-      "translate(" + dimensions.margin.left + "," + dimensions.margin.top + ")"
+      `translate(${dimensions.margin.left}px, ${dimensions.margin.top}px)`
     );
 
-  // create the x and y scales
-  var xScale = d3
-    .scaleBand() //all bars are same width
-    .range([0, dimensions.width]) //horizontal literal width
-    .domain(d3.map(dataset, (d) => d.semester)) //horizontal points being marked
-    .padding(0.1); //how  w i d e  are the *gaps* in the bars?
-
-  console.log(yAccessor);
-  let myCoolExtent = d3.extent(dataset, yAccessor);
-  myCoolExtent[0] -= 0.01;
-  var yScale = d3
-    .scaleLinear() //the bar height is dynamic / linear
-    .domain(myCoolExtent) // max and min are based on data set used
-    // have a button that does this
-    //.domain([0, 4]) // max and min are based on data set used
-    .range([dimensions.height, 0]);
-
-  //generate bottom axis
-  svg
-    .append("g")
-    .attr("transform", "translate(0," + dimensions.height + ")")
-    .call(
-      d3.axisBottom(xScale).tickFormat(function (d, i) {
-        return dataset[i].name;
-      })
-    )
-    .selectAll("text")
-    .attr("transform", "translate(-10,0)rotate(-65)")
-    .style("text-anchor", "end");
-
-  //generate left axis
-  svg.append("g").call(d3.axisLeft(yScale));
-
-  svg
+  var textA = svg
     .append("text")
-    .attr("x", -(dimensions.height / 2))
-    .attr("y", -dimensions.margin.left / 2)
+    .attr("text-anchor", "end")
+    .attr("y", 6)
+    .attr("x", -150)
+    .attr("dy", ".75em")
     .attr("transform", "rotate(-90)")
-    .attr("text-anchor", "middle")
     .text("Average GPA");
 
-  svg
+  var textB = svg
     .append("text")
     .attr("x", dimensions.width / 2)
-    .attr("y", dimensions.height + dimensions.margin.bottom)
+    .attr("y", dimensions.height)
     .attr("text-anchor", "middle")
     .text("Semester");
 
-  //make all the bars
-  var myColor = "#a11640";
-  svg
+  //generate initial plane to graph the things on
+  var bars = bounds
     .selectAll("bar")
     .data(dataset)
     .enter()
@@ -157,130 +122,99 @@ Promise.all([
     .attr("x", function (d) {
       return xScale(d.semester);
     })
+    .attr("width", xScale.bandwidth)
     .attr("y", function (d) {
-      // console.log(d.A);
-      // console.log(convertPct(d.A));
       return yScale(d.condensed);
     })
-    .attr("width", xScale.bandwidth())
     .attr("height", function (d) {
-      return dimensions.height - yScale(d.condensed);
+      return dimensions.boundedHeight - yScale(d.condensed);
     })
-    .attr("fill", myColor);
+    .attr("fill", "steelblue");
 
-  //4.0 button
-  d3.select("#scale").on("click", function () {
-    svg.selectAll("*").remove();
-    var yScale = d3.scaleLinear().domain([0, 4]).range([dimensions.height, 0]);
-    svg
-      .append("g")
-      .attr("transform", "translate(0," + dimensions.height + ")")
-      .call(
-        d3.axisBottom(xScale).tickFormat(function (d, i) {
-          return dataset[i].name;
-        })
-      )
-      .selectAll("text")
-      .attr("transform", "translate(-10,0)rotate(-65)")
-      .style("text-anchor", "end");
-
-    //generate left axis
-    svg.append("g").call(d3.axisLeft(yScale));
-
-    svg
-      .append("text")
-      .attr("x", -(dimensions.height / 2))
-      .attr("y", -dimensions.margin.left / 2)
-      .attr("transform", "rotate(-90)")
-      .attr("text-anchor", "middle")
-      .text("Average GPA");
-
-    svg
-      .append("text")
-      .attr("x", dimensions.width / 2)
-      .attr("y", dimensions.height + dimensions.margin.bottom)
-      .attr("text-anchor", "middle")
-      .text("Semester");
-
-    var myColor = "#a11640";
-    svg
-      .selectAll("bar")
-      .data(dataset)
-      .enter()
-      .append("rect")
-      .attr("x", function (d) {
-        return xScale(d.semester);
+  var xAxis = d3
+    .axisBottom(xScale)
+    .tickValues(
+      xScale.domain().filter(function (d, i) {
+        return i + 1;
       })
-      .attr("y", function (d) {
-        // console.log(d.A);
-        // console.log(convertPct(d.A));
-        return yScale(d.condensed);
-      })
-      .attr("width", xScale.bandwidth())
-      .attr("height", function (d) {
-        return dimensions.height - yScale(d.condensed);
-      })
-      .attr("fill", myColor);
-  });
+    )
+    .tickFormat(function (d) {
+      return dataset[d].name;
+    })
+    .tickSizeOuter(0);
 
-  //zoom button
+  //create the xAxis
+  svg
+    .append("g")
+    .attr(
+      "transform",
+      "translate(" +
+        dimensions.margin.left +
+        "," +
+        (dimensions.boundedHeight + dimensions.margin.top) +
+        ")"
+    )
+    .call(xAxis)
+    .selectAll("text")
+    .style("text-anchor", "end")
+    .attr("dx", "-.8em")
+    .attr("dy", ".15em")
+    .attr("transform", "rotate(-65)");
+
+  var yAxis = d3.axisLeft(yScale);
+  //create the yAxis
+
+  var changing_axis = svg
+    .append("g")
+    .attr(
+      "transform",
+      "translate(" + dimensions.margin.left + "," + dimensions.margin.top + ")"
+    )
+    .call(yAxis);
+
   d3.select("#zoom").on("click", function () {
-    svg.selectAll("*").remove();
     let myCoolExtent = d3.extent(dataset, yAccessor);
     myCoolExtent[0] -= 0.01;
-    var yScale = d3
+    yScale = d3
       .scaleLinear()
       .domain(myCoolExtent)
-      .range([dimensions.height, 0]);
-    svg
-      .append("g")
-      .attr("transform", "translate(0," + dimensions.height + ")")
-      .call(
-        d3.axisBottom(xScale).tickFormat(function (d, i) {
-          return dataset[i].name;
-        })
-      )
-      .selectAll("text")
-      .attr("transform", "translate(-10,0)rotate(-65)")
-      .style("text-anchor", "end");
-
-    //generate left axis
-    svg.append("g").call(d3.axisLeft(yScale));
-
-    svg
-      .append("text")
-      .attr("x", -(dimensions.height / 2))
-      .attr("y", -dimensions.margin.left / 2)
-      .attr("transform", "rotate(-90)")
-      .attr("text-anchor", "middle")
-      .text("Average GPA");
-
-    svg
-      .append("text")
-      .attr("x", dimensions.width / 2)
-      .attr("y", dimensions.height + dimensions.margin.bottom)
-      .attr("text-anchor", "middle")
-      .text("Semester");
-
-    var myColor = "#a11640";
-    svg
-      .selectAll("bar")
-      .data(dataset)
-      .enter()
-      .append("rect")
+      .range([dimensions.boundedHeight, 0]);
+    yAxis = d3.axisLeft(yScale);
+    changing_axis.transition().call(yAxis);
+    bars
+      .transition()
       .attr("x", function (d) {
         return xScale(d.semester);
       })
+      .attr("width", xScale.bandwidth)
       .attr("y", function (d) {
-        // console.log(d.A);
-        // console.log(convertPct(d.A));
         return yScale(d.condensed);
       })
-      .attr("width", xScale.bandwidth())
       .attr("height", function (d) {
-        return dimensions.height - yScale(d.condensed);
+        return dimensions.boundedHeight - yScale(d.condensed);
       })
-      .attr("fill", myColor);
+      .style("fill", "steelblue");
+  });
+  d3.select("#scale").on("click", function () {
+    yScale = d3
+      .scaleLinear()
+      .domain([0, 4])
+      .range([dimensions.boundedHeight, 0]);
+    yAxis = d3.axisLeft(yScale);
+    changing_axis.transition().call(yAxis);
+    bars
+      .transition()
+      .attr("x", function (d) {
+        return xScale(d.semester);
+      })
+      .attr("width", xScale.bandwidth)
+      .attr("y", function (d) {
+        return yScale(d.condensed);
+      })
+      .attr("height", function (d) {
+        return dimensions.boundedHeight - yScale(d.condensed);
+      })
+      .style("fill", "steelblue");
   });
 });
 

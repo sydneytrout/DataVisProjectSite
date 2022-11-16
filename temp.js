@@ -1,5 +1,3 @@
-/** @format */
-
 Promise.all([
   d3.csv("refined_data/2013f.csv"),
   d3.csv("refined_data/2014f.csv"),
@@ -282,39 +280,3 @@ Promise.all([
       })
       .attr("fill", myColor);
   });
-});
-
-function convertPct(myValue) {
-  return +myValue.replace("%", "");
-}
-
-function condneseSemester(semester) {
-  let total = 0;
-  for (let i = 0; i < semester.length; i++) {
-    total += condenseCourse(semester[i]);
-  }
-  total /= semester.length;
-  // console.log(semester.length);
-  return total;
-}
-
-function condenseCourse(course) {
-  let divisor =
-    convertPct(course["A"]) +
-    convertPct(course["B"]) +
-    convertPct(course["C"]) +
-    convertPct(course["D"]) +
-    convertPct(course["F"]) +
-    convertPct(course["W"]);
-  if (divisor === 0) {
-    divisor = 100;
-  }
-  let total =
-    (convertPct(course["A"]) / divisor) * 4 +
-    (convertPct(course["B"]) / divisor) * 3 +
-    (convertPct(course["C"]) / divisor) * 2 +
-    (convertPct(course["D"]) / divisor) * 1 +
-    (convertPct(course["F"]) / divisor) * 0;
-
-  return total;
-}
