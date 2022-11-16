@@ -131,6 +131,9 @@ Promise.all([
       return dimensions.boundedHeight - yScale(d.condensed);
     })
     .attr("fill", "steelblue")
+    .on("click", function (d, i) {
+      genSemesterChart(i.semester);
+    })
     .on("mouseover", function (d, i) {
       d3.select(this).attr("style", "outline: solid black;");
     })
