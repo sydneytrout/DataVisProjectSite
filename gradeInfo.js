@@ -78,7 +78,7 @@ function genGradeChart(dataset, htmlId) {
       left: 100,
     },
   };
-  console.log(htmlId);
+
   var svg = d3
     .select(htmlId)
     .style("width", dimensions.width)
@@ -93,7 +93,6 @@ function genGradeChart(dataset, htmlId) {
     .scaleBand()
     .domain(
       dataset.map(function (d) {
-        console.log(d);
         return d.grade;
       })
     )
@@ -154,7 +153,7 @@ function genGradeChart(dataset, htmlId) {
       d3.select(this).attr("style", "outline: solid black;");
       var bar = d3.select(this);
       var label = d3.select(this.parentNode).selectAll(".label").data([d]);
-      console.log(i.pct);
+
       label
         .enter()
         .append("text")

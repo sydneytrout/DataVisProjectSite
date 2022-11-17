@@ -1,4 +1,16 @@
 /** @format */
+function getMyLevels(dataset, selectedCourse) {
+  var total = 0;
+
+  for (course in dataset) {
+    if (dataset[course].Course === selectedCourse) {
+      total++;
+    }
+  }
+
+  return total;
+}
+
 function genLevelChart(semNum, selectedCourse) {
   if (courseGraph !== undefined) {
     courseGraph.selectAll("*").remove();

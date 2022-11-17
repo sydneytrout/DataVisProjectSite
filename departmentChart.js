@@ -47,6 +47,7 @@ function genSemesterChart(semNum, name) {
     var dataset = files[semNum];
     var courses = {};
 
+    var oldDataset = dataset;
     for (course in dataset) {
       if (
         dataset[course].Course !== undefined &&
@@ -56,6 +57,7 @@ function genSemesterChart(semNum, name) {
         courses[dataset[course].Course] = 1;
       }
     }
+    // console.log(getMyLevels(dataset, "CPSC"));
 
     var temp = [];
     for (course in courses) {
@@ -136,8 +138,17 @@ function genSemesterChart(semNum, name) {
       .attr("height", function (d) {
         return dimensions.boundedHeight - yScale(d.gpa);
       })
-      .attr("fill", "steelblue")
+
+      .attr("fill", function (d) {
+        if (getMyLevels(oldDataset, d.course) > 60) {
+          return "orange";
+        }
+        return smallScale(getMyLevels(oldDataset, d.course));
+      })
       .on("click", function (d, i) {
+        // console.log(scale(getMyLevels(oldDataset, i.course)));
+        console.log(getMyLevels(oldDataset, i.course));
+
         genLevelChart(semNum, i.course);
       })
       .on("mouseover", function (d, i) {

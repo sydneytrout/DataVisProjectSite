@@ -2,6 +2,13 @@
 var departmentGraph;
 var courseGraph;
 var profGraph;
+
+const smallScale = d3
+  .scaleLinear([0, 60], ["lightgrey", "purple"])
+  .interpolate(d3.interpolateRgb.gamma(1.9));
+// const bigScale = d3
+//   .scaleLinear([60, 150], ["purple", "orange"])
+//   .interpolate(d3.interpolateRgb.gamma(1.9));
 Promise.all([
   d3.csv("refined_data/2013f.csv"),
   d3.csv("refined_data/2014f.csv"),
@@ -60,7 +67,7 @@ Promise.all([
   dataset[16].name = "Spring 2021";
   dataset[17].name = "Spring 2022";
 
-  console.log(dataset[0]);
+  // console.log(dataset[0]);
 
   // generate initial planes
   var svg = d3
