@@ -146,6 +146,19 @@ function genSemesterChart(semNum) {
           "#subGradebarchart"
         );
         d3.select(this).attr("style", "outline: solid black;");
+        var bar = d3.select(this);
+        var label = d3.select(this.parentNode).selectAll(".label").data([d]);
+        label
+          .enter()
+          .append("text")
+          .attr("class", "label")
+          .merge(label)
+          .text(d3.format(".3")(i.gpa))
+          .style("display", null)
+          .style("font", "10px sans-serif")
+          .attr("text-anchor", "middle")
+          .attr("x", +bar.attr("x") + +bar.attr("width") / 2)
+          .attr("y", +bar.attr("y") - 6);
       })
       .on("mouseout", function (d, i) {
         d3.select(this).attr("style", "outline: none;");
