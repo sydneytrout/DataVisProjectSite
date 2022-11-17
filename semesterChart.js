@@ -41,24 +41,24 @@ Promise.all([
     dataset[file].semester = file;
     dataset[file].gpa = condneseSemester(files[file]);
   }
-  dataset[0].name = "2013 Fall";
-  dataset[1].name = "2014 Fall";
-  dataset[2].name = "2014 Spring";
-  dataset[3].name = "2015 Fall";
-  dataset[4].name = "2015 Spring";
-  dataset[5].name = "2016 Fall";
-  dataset[6].name = "2016 Spring";
-  dataset[7].name = "2017 Fall";
-  dataset[8].name = "2017 Spring";
-  dataset[9].name = "2018 Fall";
-  dataset[10].name = "2018 Spring";
-  dataset[11].name = "2019 Fall";
-  dataset[12].name = "2019 Spring";
-  dataset[13].name = "2020 Fall";
-  dataset[14].name = "2020 Spring";
-  dataset[15].name = "2021 Fall";
-  dataset[16].name = "2021 Spring";
-  dataset[17].name = "2022 Spring";
+  dataset[0].name = "Fall 2013";
+  dataset[1].name = "Fall 2014";
+  dataset[2].name = "Spring 2014";
+  dataset[3].name = "Fall 2015";
+  dataset[4].name = "Spring 2015";
+  dataset[5].name = "Fall 2016";
+  dataset[6].name = "Spring 2016";
+  dataset[7].name = "Fall 2017";
+  dataset[8].name = "Spring 2017";
+  dataset[9].name = "Fall 2018";
+  dataset[10].name = "Spring 2018";
+  dataset[11].name = "Fall 2019";
+  dataset[12].name = "Spring 2019";
+  dataset[13].name = "Fall 2020";
+  dataset[14].name = "Spring 2020";
+  dataset[15].name = "Fall 2021";
+  dataset[16].name = "Spring 2021";
+  dataset[17].name = "Spring 2022";
 
   console.log(dataset[0]);
 
@@ -136,7 +136,7 @@ Promise.all([
     })
     .attr("fill", "steelblue")
     .on("click", function (d, i) {
-      genSemesterChart(i.semester);
+      genSemesterChart(i.semester, i.name);
     })
     .on("mouseover", function (d, i) {
       genGradeChart(dataset[i.semester], "#gradebarchart");

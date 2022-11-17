@@ -1,7 +1,7 @@
 /** @format */
 var meWhenISeeD3 = "https://media.giphy.com/media/3o7TKSjRrfIPjeiVyE/giphy.gif";
 
-function genSemesterChart(semNum) {
+function genSemesterChart(semNum, name) {
   if (departmentGraph !== undefined) {
     departmentGraph.selectAll("*").remove();
   }
@@ -118,7 +118,7 @@ function genSemesterChart(semNum) {
       .attr("x", dimensions.width / 2)
       .attr("y", dimensions.height)
       .attr("text-anchor", "middle")
-      .text("Department");
+      .text("Departments for Semester " + name);
 
     //generate primary bar chart
     var bars = bounds

@@ -104,7 +104,9 @@ function genProfChart(data, courseLevel) {
       .attr("x", dimensions.width / 2)
       .attr("y", dimensions.height)
       .attr("text-anchor", "middle")
-      .text("Professors");
+      .text(
+        "Professors for " + (parseInt(courseLevel) + 1).toString() + "000's"
+      );
 
     //generate primary bar chart
     var bars = bounds

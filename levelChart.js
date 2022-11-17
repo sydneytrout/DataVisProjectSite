@@ -122,7 +122,7 @@ function genLevelChart(semNum, selectedCourse) {
       .attr("x", dimensions.width / 2)
       .attr("y", dimensions.height)
       .attr("text-anchor", "middle")
-      .text("Course Level");
+      .text("Course Levels for " + selectedCourse);
 
     //generate primary bar chart
     var bars = bounds
