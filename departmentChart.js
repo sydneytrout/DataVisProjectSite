@@ -1,9 +1,15 @@
 /** @format */
 var meWhenISeeD3 = "https://media.giphy.com/media/3o7TKSjRrfIPjeiVyE/giphy.gif";
-var meWhen;
+
 function genSemesterChart(semNum) {
-  if (meWhen !== undefined) {
-    meWhen.selectAll("*").remove();
+  if (departmentGraph !== undefined) {
+    departmentGraph.selectAll("*").remove();
+  }
+  if (profGraph !== undefined) {
+    profGraph.selectAll("*").remove();
+  }
+  if (courseGraph !== undefined) {
+    courseGraph.selectAll("*").remove();
   }
 
   Promise.all([
@@ -135,6 +141,10 @@ function genSemesterChart(semNum) {
         genLevelChart(semNum, i.course);
       })
       .on("mouseover", function (d, i) {
+        genGradeChart(
+          getDeptGrades(files[semNum], i.course),
+          "#subGradebarchart"
+        );
         d3.select(this).attr("style", "outline: solid black;");
       })
       .on("mouseout", function (d, i) {
@@ -189,7 +199,7 @@ function genSemesterChart(semNum) {
       )
       .call(yAxis);
 
-    meWhen = svg;
+    departmentGraph = svg;
   });
 
   function condenseDepartment(semester, department) {

@@ -1,5 +1,7 @@
 /** @format */
-
+var departmentGraph;
+var courseGraph;
+var profGraph;
 Promise.all([
   d3.csv("refined_data/2013f.csv"),
   d3.csv("refined_data/2014f.csv"),
@@ -24,7 +26,7 @@ Promise.all([
   var size = d3.min([window.innerWidth * 1.5, window.innerHeight * 1.5]);
 
   var dimensions = {
-    width: size,
+    width: size / 2,
     height: size / 3,
     margin: {
       top: 10,
@@ -37,7 +39,7 @@ Promise.all([
   for (file in files) {
     dataset.push(files[file]);
     dataset[file].semester = file;
-    dataset[file].condensed = condneseSemester(files[file]);
+    dataset[file].gpa = condneseSemester(files[file]);
   }
   dataset[0].name = "2013 Fall";
   dataset[1].name = "2014 Fall";
@@ -57,6 +59,8 @@ Promise.all([
   dataset[15].name = "2021 Fall";
   dataset[16].name = "2021 Spring";
   dataset[17].name = "2022 Spring";
+
+  console.log(dataset[0]);
 
   // generate initial planes
   var svg = d3
@@ -81,7 +85,7 @@ Promise.all([
     .padding(0.2);
 
   var yAccessor = (d) => {
-    return d.condensed;
+    return d.gpa;
   };
 
   var yScale = d3
@@ -125,16 +129,17 @@ Promise.all([
     })
     .attr("width", xScale.bandwidth)
     .attr("y", function (d) {
-      return yScale(d.condensed);
+      return yScale(d.gpa);
     })
     .attr("height", function (d) {
-      return dimensions.boundedHeight - yScale(d.condensed);
+      return dimensions.boundedHeight - yScale(d.gpa);
     })
     .attr("fill", "steelblue")
     .on("click", function (d, i) {
       genSemesterChart(i.semester);
     })
     .on("mouseover", function (d, i) {
+      genGradeChart(dataset[i.semester], "#gradebarchart");
       d3.select(this).attr("style", "outline: solid black;");
     })
     .on("mouseout", function (d, i) {
@@ -202,10 +207,10 @@ Promise.all([
       })
       .attr("width", xScale.bandwidth)
       .attr("y", function (d) {
-        return yScale(d.condensed);
+        return yScale(d.gpa);
       })
       .attr("height", function (d) {
-        return dimensions.boundedHeight - yScale(d.condensed);
+        return dimensions.boundedHeight - yScale(d.gpa);
       })
       .style("fill", "steelblue");
   });
@@ -223,10 +228,10 @@ Promise.all([
       })
       .attr("width", xScale.bandwidth)
       .attr("y", function (d) {
-        return yScale(d.condensed);
+        return yScale(d.gpa);
       })
       .attr("height", function (d) {
-        return dimensions.boundedHeight - yScale(d.condensed);
+        return dimensions.boundedHeight - yScale(d.gpa);
       })
       .style("fill", "steelblue");
   });

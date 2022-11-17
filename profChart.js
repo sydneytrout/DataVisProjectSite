@@ -1,5 +1,5 @@
 /** @format */
-var profGraph;
+
 function genProfChart(data, courseLevel) {
   if (profGraph !== undefined) {
     profGraph.selectAll("*").remove();
@@ -26,13 +26,14 @@ function genProfChart(data, courseLevel) {
   ]).then(function (files) {
     var size = d3.min([window.innerWidth * 1.5, window.innerHeight * 1.5]);
     var divisor = data[courseLevel].length;
-    if (divisor < 5) {
-      divisor = 4;
+    // console.log(divisor);
+    if (divisor > 7) {
+      myWidth = 50 * divisor;
     } else {
-      divisor = 1;
+      myWidth = size / 2;
     }
     var dimensions = {
-      width: size / divisor,
+      width: myWidth,
       height: size / 3,
       margin: {
         top: 10,
@@ -43,11 +44,13 @@ function genProfChart(data, courseLevel) {
     };
 
     var dataset = data[courseLevel];
+    // console.log(dataset);
     for (course in dataset) {
       dataset[course].gpa = condenseCourse(dataset[course]);
     }
-    console.log(dataset);
-    console.log(dataset[0].gpa);
+
+    // console.log(dataset);
+
     var svg = d3
       .select("#subSubSubBarchart")
       .style("width", dimensions.width)
@@ -119,7 +122,14 @@ function genProfChart(data, courseLevel) {
       .attr("height", function (d) {
         return dimensions.boundedHeight - yScale(d.gpa);
       })
-      .attr("fill", "steelblue");
+      .attr("fill", "steelblue")
+      .on("mouseover", function (d, i) {
+        genGradeChart([i], "#subSubSubGradebarchart");
+        d3.select(this).attr("style", "outline: solid black;");
+      })
+      .on("mouseout", function (d, i) {
+        d3.select(this).attr("style", "outline: none;");
+      });
 
     //generate secondary bar chart
 
@@ -132,7 +142,6 @@ function genProfChart(data, courseLevel) {
         })
       )
       .tickFormat(function (d) {
-        console.log(d);
         return d.Instructor;
       })
       .tickSizeOuter(0);

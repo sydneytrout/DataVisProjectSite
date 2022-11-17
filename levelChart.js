@@ -1,8 +1,10 @@
 /** @format */
-var departmentGraph;
 function genLevelChart(semNum, selectedCourse) {
-  if (departmentGraph !== undefined) {
-    departmentGraph.selectAll("*").remove();
+  if (courseGraph !== undefined) {
+    courseGraph.selectAll("*").remove();
+  }
+  if (profGraph !== undefined) {
+    profGraph.selectAll("*").remove();
   }
   Promise.all([
     d3.csv("refined_data/2013f.csv"),
@@ -25,16 +27,7 @@ function genLevelChart(semNum, selectedCourse) {
     d3.csv("refined_data/2022s.csv"),
   ]).then(function (files) {
     var size = d3.min([window.innerWidth * 1.5, window.innerHeight * 1.5]);
-    var dimensions = {
-      width: size / 2,
-      height: size / 3,
-      margin: {
-        top: 10,
-        right: 10,
-        bottom: 100,
-        left: 100,
-      },
-    };
+
     var dataset = files[semNum];
     for (course in dataset) {
       if (dataset[course].Course !== selectedCourse) {
@@ -42,14 +35,18 @@ function genLevelChart(semNum, selectedCourse) {
       }
     }
 
+    var oldDataset = dataset;
     var actualData = new Array(10);
     for (i = 0; i < 10; i++) {
       actualData[i] = [];
     }
+
     for (course in dataset) {
-      actualData[Math.floor(dataset[course].Numbe / 1000 - 1)].push(
-        dataset[course]
-      );
+      if (convertPct(dataset[course].P) === 0) {
+        actualData[Math.floor(dataset[course].Numbe / 1000 - 1)].push(
+          dataset[course]
+        );
+      }
     }
 
     var temp = [];
@@ -60,7 +57,17 @@ function genLevelChart(semNum, selectedCourse) {
       }
     }
     dataset = temp;
-    console.log(actualData);
+
+    var dimensions = {
+      width: dataset.length * 200,
+      height: size / 3,
+      margin: {
+        top: 10,
+        right: 10,
+        bottom: 100,
+        left: 100,
+      },
+    };
 
     var svg = d3
       .select("#subSubBarchart")
@@ -138,6 +145,10 @@ function genLevelChart(semNum, selectedCourse) {
         genProfChart(actualData, i.level);
       })
       .on("mouseover", function (d, i) {
+        genGradeChart(
+          getLevelGrades(oldDataset, i.level),
+          "#subSubGradebarchart"
+        );
         d3.select(this).attr("style", "outline: solid black;");
       })
       .on("mouseout", function (d, i) {
@@ -191,7 +202,7 @@ function genLevelChart(semNum, selectedCourse) {
           ")"
       )
       .call(yAxis);
-    departmentGraph = svg;
+    courseGraph = svg;
   });
 }
 
