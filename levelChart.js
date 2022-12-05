@@ -13,7 +13,11 @@ function getMyLevels(dataset, selectedCourse) {
 
 function genLevelChart(semNum, selectedCourse) {
   mainGraph.selectAll("*").remove();
+  var object = document.getElementById("search");
+  var object2 = document.getElementById("searchTitle");
 
+  object.style.display = "none";
+  object2.style.display = "none";
   Promise.all([
     d3.csv("refined_data/2013f.csv"),
     d3.csv("refined_data/2014f.csv"),

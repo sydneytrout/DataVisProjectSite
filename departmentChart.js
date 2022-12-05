@@ -3,6 +3,11 @@ var meWhenISeeD3 = "https://media.giphy.com/media/3o7TKSjRrfIPjeiVyE/giphy.gif";
 
 function genDepartmentChart(semNum, name) {
   mainGraph.selectAll("*").remove();
+  var object = document.getElementById("search");
+  var object2 = document.getElementById("searchTitle");
+
+  object.style.display = "block";
+  object2.style.display = "block";
   Promise.all([
     d3.csv("refined_data/2013f.csv"),
     d3.csv("refined_data/2014f.csv"),

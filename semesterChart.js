@@ -9,6 +9,11 @@ var prevData = [];
 //   .scaleLinear([60, 150], ["purple", "orange"])
 //   .interpolate(d3.interpolateRgb.gamma(1.9));
 function genSemesterChart() {
+  var object = document.getElementById("search");
+  var object2 = document.getElementById("searchTitle");
+
+  object.style.display = "none";
+  object2.style.display = "none";
   Promise.all([
     d3.csv("refined_data/2013f.csv"),
     d3.csv("refined_data/2014f.csv"),
