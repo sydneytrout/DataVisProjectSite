@@ -12,12 +12,8 @@ function getMyLevels(dataset, selectedCourse) {
 }
 
 function genLevelChart(semNum, selectedCourse) {
-  if (courseGraph !== undefined) {
-    courseGraph.selectAll("*").remove();
-  }
-  if (profGraph !== undefined) {
-    profGraph.selectAll("*").remove();
-  }
+  mainGraph.selectAll("*").remove();
+
   Promise.all([
     d3.csv("refined_data/2013f.csv"),
     d3.csv("refined_data/2014f.csv"),
@@ -82,7 +78,7 @@ function genLevelChart(semNum, selectedCourse) {
     };
 
     var svg = d3
-      .select("#subSubBarchart")
+      .select("#barchart")
       .style("width", dimensions.width)
       .style("height", dimensions.height);
 
@@ -123,7 +119,7 @@ function genLevelChart(semNum, selectedCourse) {
     var yLabel = svg
       .append("text")
       .attr("text-anchor", "end")
-      .attr("y", 6)
+      .attr("y", 30)
       .attr("x", -150)
       .attr("dy", ".75em")
       .attr("transform", "rotate(-90)")
@@ -132,7 +128,7 @@ function genLevelChart(semNum, selectedCourse) {
     var xLabel = svg
       .append("text")
       .attr("x", dimensions.width / 2)
-      .attr("y", dimensions.height)
+      .attr("y", dimensions.height - 45)
       .attr("text-anchor", "middle")
       .text("Course Levels for " + selectedCourse);
 
@@ -157,10 +153,7 @@ function genLevelChart(semNum, selectedCourse) {
         genProfChart(actualData, i.level);
       })
       .on("mouseover", function (d, i) {
-        genGradeChart(
-          getLevelGrades(oldDataset, i.level),
-          "#subSubGradebarchart"
-        );
+        genGradeChart(getLevelGrades(oldDataset, i.level), "#gradebarchart");
         d3.select(this).attr("style", "outline: solid black;");
         var bar = d3.select(this);
         var label = d3.select(this.parentNode).selectAll(".label").data([d]);
@@ -169,15 +162,16 @@ function genLevelChart(semNum, selectedCourse) {
           .append("text")
           .attr("class", "label")
           .merge(label)
-          .text(d3.format(".3")(i.gpa))
+          .text("GPA: " + d3.format(".3")(i.gpa))
           .style("display", null)
-          .style("font", "10px sans-serif")
+          .style("font", "12px times")
           .attr("text-anchor", "middle")
           .attr("x", +bar.attr("x") + +bar.attr("width") / 2)
           .attr("y", +bar.attr("y") - 6);
       })
       .on("mouseout", function (d, i) {
         d3.select(this).attr("style", "outline: none;");
+        d3.select(this.parentNode).selectAll(".label").remove();
       });
 
     //generate secondary bar chart
@@ -214,7 +208,7 @@ function genLevelChart(semNum, selectedCourse) {
       .attr("transform", "rotate(-65)");
 
     //create the yAxis
-    var yAxis = d3.axisLeft(yScale);
+    var yAxis = d3.axisLeft(yScale).tickValues([0, 1, 2, 3, 4]);
     //spawn y axis
     var changing_axis = svg
       .append("g")
@@ -227,7 +221,11 @@ function genLevelChart(semNum, selectedCourse) {
           ")"
       )
       .call(yAxis);
-    courseGraph = svg;
+    d3.select("#goBack").on("click", function () {
+      genDepartmentChart(prevData[2], prevData[3]);
+    });
+    mainGraph = svg;
+    currentChart = 2;
   });
 }
 

@@ -119,8 +119,8 @@ function genGradeChart(dataset, htmlId) {
   var yLabel = svg
     .append("text")
     .attr("text-anchor", "end")
-    .attr("y", 6)
-    .attr("x", -150)
+    .attr("y", 50)
+    .attr("x", -120)
     .attr("dy", ".75em")
     .attr("transform", "rotate(-90)")
     .text("Average Percentage");
@@ -128,7 +128,7 @@ function genGradeChart(dataset, htmlId) {
   var xLabel = svg
     .append("text")
     .attr("x", dimensions.width / 2)
-    .attr("y", dimensions.height)
+    .attr("y", dimensions.height - 60)
     .attr("text-anchor", "middle")
     .text("Grade");
 

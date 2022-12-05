@@ -1,9 +1,8 @@
 /** @format */
 
 function genProfChart(data, courseLevel) {
-  if (profGraph !== undefined) {
-    profGraph.selectAll("*").remove();
-  }
+  mainGraph.selectAll("*").remove();
+
   Promise.all([
     d3.csv("refined_data/2013f.csv"),
     d3.csv("refined_data/2014f.csv"),
@@ -52,7 +51,7 @@ function genProfChart(data, courseLevel) {
     // console.log(dataset);
 
     var svg = d3
-      .select("#subSubSubBarchart")
+      .select("#barchart")
       .style("width", dimensions.width)
       .style("height", dimensions.height);
 
@@ -93,7 +92,7 @@ function genProfChart(data, courseLevel) {
     var yLabel = svg
       .append("text")
       .attr("text-anchor", "end")
-      .attr("y", 6)
+      .attr("y", 30)
       .attr("x", -150)
       .attr("dy", ".75em")
       .attr("transform", "rotate(-90)")
@@ -102,7 +101,7 @@ function genProfChart(data, courseLevel) {
     var xLabel = svg
       .append("text")
       .attr("x", dimensions.width / 2)
-      .attr("y", dimensions.height)
+      .attr("y", dimensions.height - 10)
       .attr("text-anchor", "middle")
       .text(
         "Professors for " + (parseInt(courseLevel) + 1).toString() + "000's"
@@ -126,7 +125,7 @@ function genProfChart(data, courseLevel) {
       })
       .attr("fill", "steelblue")
       .on("mouseover", function (d, i) {
-        genGradeChart([i], "#subSubSubGradebarchart");
+        genGradeChart([i], "#gradebarchart");
         d3.select(this).attr("style", "outline: solid black;");
         var bar = d3.select(this);
         var label = d3.select(this.parentNode).selectAll(".label").data([d]);
@@ -135,15 +134,25 @@ function genProfChart(data, courseLevel) {
           .append("text")
           .attr("class", "label")
           .merge(label)
-          .text(d3.format(".3")(i.gpa))
+          .text("GPA: " + d3.format(".3")(i.gpa))
           .style("display", null)
-          .style("font", "10px sans-serif")
+          .style("font", "12px times")
           .attr("text-anchor", "middle")
           .attr("x", +bar.attr("x") + +bar.attr("width") / 2)
           .attr("y", +bar.attr("y") - 6);
+
+        var text = svg
+          .append("text")
+          .attr("id", "topbartext")
+          .attr("x", dimensions.width / 5)
+          .attr("y", 20)
+          .attr("font-family", "times")
+          .text("Course: " + i["Course Title"]);
       })
       .on("mouseout", function (d, i) {
         d3.select(this).attr("style", "outline: none;");
+        d3.select(this.parentNode).selectAll(".label").remove();
+        d3.select("#topbartext").remove();
       });
 
     //generate secondary bar chart
@@ -180,7 +189,7 @@ function genProfChart(data, courseLevel) {
       .attr("transform", "rotate(-35)");
 
     //create the yAxis
-    var yAxis = d3.axisLeft(yScale);
+    var yAxis = d3.axisLeft(yScale).tickValues([0, 1, 2, 3, 4]);
     //spawn y axis
     var changing_axis = svg
       .append("g")
@@ -193,6 +202,12 @@ function genProfChart(data, courseLevel) {
           ")"
       )
       .call(yAxis);
-    profGraph = svg;
+    d3.select("#goBack").on("click", function () {
+      console.log(prevData);
+
+      genLevelChart(prevData[0], prevData[1]);
+    });
+    mainGraph = svg;
+    currentChart = 3;
   });
 }
