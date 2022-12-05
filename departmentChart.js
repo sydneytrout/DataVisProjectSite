@@ -125,9 +125,6 @@ function genDepartmentChart(semNum, name) {
       .attr("r", 4)
 
       .attr("fill", function (d) {
-        if (getMyLevels(oldDataset, d.course) > 60) {
-          return "orange";
-        }
         return smallScale(getMyLevels(oldDataset, d.course));
       })
       .on("click", function (d, i) {
@@ -139,27 +136,33 @@ function genDepartmentChart(semNum, name) {
         prevData[1] = i.course;
       })
       .on("mouseover", function (d, i) {
-        genGradeChart(getDeptGrades(files[semNum], i.course), "#gradebarchart");
-        d3.select(this).attr("style", "fill: red;");
-        var bar = d3.select(this);
-        var label = d3.select(this.parentNode).selectAll(".label").data([d]);
-        label
-          .enter()
-          .append("text")
-          .attr("class", "label")
-          .merge(label)
-          .text("Department: " + i.course + " GPA: " + d3.format(".3")(i.gpa))
-          .style("display", null)
-          .style("font", "15px times")
-          .attr("text-anchor", "middle")
-          .attr("x", bar.attr("cx"))
-          .attr("y", bar.attr("cy") - 8);
-        // .attr("x", +bar.attr("x") + +bar.attr("width") / 2)
-        // .attr("y", +bar.attr("y") - 6);
+        console.log(d3.select(this).style("opacity"));
+        if (d3.select(this).style("opacity") !== "0") {
+          genGradeChart(
+            getDeptGrades(files[semNum], i.course),
+            "#gradebarchart"
+          );
+          d3.select(this).attr("style", "fill: red;");
+          var bar = d3.select(this);
+          var label = d3.select(this.parentNode).selectAll(".label").data([d]);
+          label
+            .enter()
+            .append("text")
+            .attr("class", "label")
+            .merge(label)
+            .text("Department: " + i.course + " GPA: " + d3.format(".3")(i.gpa))
+            .style("display", null)
+            .style("font", "15px times")
+            .attr("text-anchor", "middle")
+            .attr("x", bar.attr("cx"))
+            .attr("y", bar.attr("cy") - 8);
+        }
       })
       .on("mouseout", function (d, i) {
-        d3.select(this).attr("style", "outline: none;");
-        d3.select(this.parentNode).selectAll(".label").remove();
+        if (d3.select(this).style("opacity") !== "0") {
+          d3.select(this).attr("style", "outline: none;");
+          d3.select(this.parentNode).selectAll(".label").remove();
+        }
       });
 
     //generate secondary bar chart
@@ -210,6 +213,26 @@ function genDepartmentChart(semNum, name) {
     d3.select("#goBack").on("click", function () {
       genSemesterChart();
     });
+    var inputField = d3.select("#search");
+
+    inputField.on("input", function () {
+      // Get the keyword entered by the user
+      var keyword = this.value;
+
+      // Filter the data using the keyword
+      var filteredData = filterData(dataset, keyword);
+      bars
+        .transition()
+        .duration(500)
+        .style("opacity", function (d) {
+          if (filteredData.includes(d)) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+    });
+
     mainGraph = svg;
     currentChart = 1;
   });
@@ -234,4 +257,10 @@ function genDepartmentChart(semNum, name) {
 
 function convertPct(myValue) {
   return +myValue.replace("%", "");
+}
+
+function filterData(data, keyword) {
+  return data.filter(function (d) {
+    return d.course.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
+  });
 }

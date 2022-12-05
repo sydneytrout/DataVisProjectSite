@@ -1,9 +1,6 @@
 <!-- @format -->
 
-Change chart to replace main bar chart
-Lower amount of ticks
 Show other semesterly differences?
-Get rid of scrolling  
 Coloring needs to be fixed,
 
 - Maybe adjust scaling to scale faster as course increases

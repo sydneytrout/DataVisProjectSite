@@ -32,7 +32,7 @@ function genProfChart(data, courseLevel) {
       myWidth = size / 2;
     }
     var dimensions = {
-      width: myWidth,
+      width: 1000,
       height: size / 3,
       margin: {
         top: 10,
