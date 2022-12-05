@@ -7,7 +7,9 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
   </head>
   <body>
-
+    <style>
+      h1 {text-align: center;}
+    </style>
     <h1>Clemson Grade Distributions: visualized </h1>
     <form>
       <label id="searchTitle" for="name">Search Department:</label><br>
@@ -15,9 +17,9 @@
       <!-- <button type="button" id="search">search</button> -->
     </form>
     <svg id="barchart"></svg>
+    <button type="button" id = "goBack">Scale Back</button>
     <svg id="gradebarchart"></svg>
     <br/>
-    <button type="button" id = "goBack">Scale Back</button>
 
     <script type = "text/javascript" src="departmentChart.js"></script>
     <script type = "text/javascript" src="semesterChart.js"></script>

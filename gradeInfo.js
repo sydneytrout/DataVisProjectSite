@@ -128,7 +128,7 @@ function genGradeChart(dataset, htmlId) {
   var xLabel = svg
     .append("text")
     .attr("x", dimensions.width / 2)
-    .attr("y", dimensions.height - 60)
+    .attr("y", dimensions.height - 45)
     .attr("text-anchor", "middle")
     .text("Grade");
 

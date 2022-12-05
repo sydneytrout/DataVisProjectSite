@@ -31,7 +31,7 @@ function genDepartmentChart(semNum, name) {
     //dimensions constant
     var size = d3.min([window.innerWidth * 1.5, window.innerHeight * 1.5]);
     var dimensions = {
-      width: size / 1.5,
+      width: size / 2,
       height: size / 3,
       margin: {
         top: 10,
@@ -76,7 +76,7 @@ function genDepartmentChart(semNum, name) {
     // set up scales
     var xScale = d3
       .scaleLinear()
-      .domain([0, 100])
+      .domain([0, 120])
       .range([0, dimensions.boundedWidth]);
     // .padding(0.1);
 
@@ -178,9 +178,7 @@ function genDepartmentChart(semNum, name) {
     var xAxis = d3
       .axisBottom(xScale)
       .tickValues([
-        0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36,
-        38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72,
-        74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100,
+        0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120
       ]);
 
     //spawn x axis

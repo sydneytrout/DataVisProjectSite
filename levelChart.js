@@ -71,7 +71,7 @@ function genLevelChart(semNum, selectedCourse) {
     dataset = temp;
 
     var dimensions = {
-      width: dataset.length * 200,
+      width: size / 2,
       height: size / 3,
       margin: {
         top: 10,
