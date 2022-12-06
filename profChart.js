@@ -165,7 +165,7 @@ function genProfChart(data, courseLevel) {
         var text = svg
           .append("text")
           .attr("id", "topbartext")
-          .attr("x", dimensions.width - 400)
+          .attr("x", dimensions.width - 300)
           .attr("y", dimensions.height - 10)
           .attr("font-family", "times")
           .text("Course: " + i["Course Title"]);
