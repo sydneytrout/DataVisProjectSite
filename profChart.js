@@ -123,7 +123,7 @@ function genProfChart(data, courseLevel) {
       .attr("height", function (d) {
         return dimensions.boundedHeight - yScale(d.gpa);
       })
-      .attr("fill", "steelblue")
+      .attr("fill", "blueviolet")
       .on("mouseover", function (d, i) {
         genGradeChart([i], "#gradebarchart");
         d3.select(this).attr("style", "outline: solid black;");

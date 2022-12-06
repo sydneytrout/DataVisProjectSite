@@ -2,7 +2,7 @@
 var mainGraph;
 var currentChart = 0;
 const smallScale = d3
-  .scaleLinear([0, 60], ["lightgrey", "purple"])
+  .scaleLinear([0, 60], ["lightgrey", "blueviolet"])
   .interpolate(d3.interpolateRgb.gamma(1.9));
 var prevData = [];
 // const bigScale = d3
@@ -149,7 +149,7 @@ function genSemesterChart() {
       .attr("height", function (d) {
         return dimensions.boundedHeight - yScale(d.gpa);
       })
-      .attr("fill", "steelblue")
+      .attr("fill", "blueviolet")
       .on("click", function (d, i) {
         prevData[2] = i.semester;
         prevData[3] = i.name;

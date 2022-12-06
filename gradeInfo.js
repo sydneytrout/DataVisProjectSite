@@ -148,7 +148,7 @@ function genGradeChart(dataset, htmlId) {
     .attr("height", function (d) {
       return dimensions.boundedHeight - yScale(d.pct);
     })
-    .attr("fill", "steelblue")
+    .attr("fill", "darkorange")
     .on("mouseover", function (d, i) {
       d3.select(this).attr("style", "outline: solid black;");
       var bar = d3.select(this);

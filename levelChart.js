@@ -152,7 +152,7 @@ function genLevelChart(semNum, selectedCourse) {
       .attr("height", function (d) {
         return dimensions.boundedHeight - yScale(d.gpa);
       })
-      .attr("fill", "steelblue")
+      .attr("fill", "blueviolet")
       .on("click", function (d, i) {
         genProfChart(actualData, i.level);
       })

@@ -1,8 +1,4 @@
 <!-- @format -->
 
 Show other semesterly differences?
-Coloring needs to be fixed,
 
-- Maybe adjust scaling to scale faster as course increases
-  Filter on low amount of classes
-- Option to expand

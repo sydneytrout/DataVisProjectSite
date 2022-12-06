@@ -147,7 +147,7 @@ function genDepartmentChart(semNum, name) {
             getDeptGrades(files[semNum], i.course),
             "#gradebarchart"
           );
-          d3.select(this).attr("style", "fill: red;");
+          d3.select(this).attr("style", "fill: darkorange;");
           var bar = d3.select(this);
           var label = d3.select(this.parentNode).selectAll(".label").data([d]);
           label
