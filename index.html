@@ -9,6 +9,8 @@
   <body>
     <style>
       h1 {text-align: center;}
+      p {text-align: center;}
+
     </style>
     <body style="background-color:#efe8f7;"></body>
     <h1>Clemson Grade Distributions</h1>
@@ -22,7 +24,19 @@
     <svg id="barchart"></svg>
     <button type="button" id = "goBack">Scale Back</button>
     <svg id="gradebarchart"></svg>
-    <br/>
+    <br/><br><br><br><br><br><br><br><br>
+    <p>
+      This is a visualization of Clemson's grade distributions from Fall 2013 to Spring 2022. The data was collected from the Clemson University Registrar's Office, formatted by a JS script and then visualized using D3.js. 
+      <br>
+      The features of this project are as follows: If you click on any bar or dot on the left bar chart, it will dive deeper into the data. You can go from Semesters to Departments to Course Levels to individual Instructors/Courses. To get out of a level, click the "Scale Back" button. 
+      <br> 
+      To the left of anything that you highlight a new graph will appear. This graph represeents the grade distribution of the highlighted item. It shows the percentage of students that received each grade.
+      <br> 
+      Finally, if you are at the department level, you can search for a specific department by typing in the search bar.
+
+    </p>
+
+    <img src="orange.png" alt="My Image" width="100" height="100" style="float: right">
 
     <script type = "text/javascript" src="departmentChart.js"></script>
     <script type = "text/javascript" src="semesterChart.js"></script>
