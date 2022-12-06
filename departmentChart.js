@@ -35,7 +35,7 @@ function genDepartmentChart(semNum, name) {
       height: size / 3,
       margin: {
         top: 20,
-        right: 10,
+        right: 100,
         bottom: 100,
         left: 100,
       },

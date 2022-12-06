@@ -8,7 +8,7 @@ function getMyLevels(dataset, selectedCourse) {
     }
   }
 
-  return total;
+  return total > 120 ? 120 : total;
 }
 
 function genLevelChart(semNum, selectedCourse) {
