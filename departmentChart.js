@@ -34,7 +34,7 @@ function genDepartmentChart(semNum, name) {
       width: size / 2,
       height: size / 3,
       margin: {
-        top: 10,
+        top: 20,
         right: 10,
         bottom: 100,
         left: 100,
@@ -178,7 +178,8 @@ function genDepartmentChart(semNum, name) {
     var xAxis = d3
       .axisBottom(xScale)
       .tickValues([
-        0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120
+        0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85,
+        90, 95, 100, 105, 110, 115, 120,
       ]);
 
     //spawn x axis

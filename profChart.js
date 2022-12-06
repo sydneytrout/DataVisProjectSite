@@ -35,7 +35,7 @@ function genProfChart(data, courseLevel) {
       width: size / 2,
       height: size / 3,
       margin: {
-        top: 10,
+        top: 20,
         right: 10,
         bottom: 100,
         left: 100,
@@ -43,12 +43,33 @@ function genProfChart(data, courseLevel) {
     };
 
     var dataset = data[courseLevel];
-    // console.log(dataset);
+    var dataset2fuckyou = [];
+    console.log(dataset);
+    var seenCourses = {};
     for (course in dataset) {
-      dataset[course].gpa = condenseCourse(dataset[course]);
+      // console.log(dataset[course]);
+      if (
+        seenCourses[
+          dataset[course].Instructor + dataset[course]["Course Title"]
+        ] === undefined
+      ) {
+        dataset[course].gpa = condenseCourse(dataset[course]);
+        seenCourses[
+          dataset[course].Instructor + dataset[course]["Course Title"]
+        ] = 1;
+        dataset2fuckyou.push(dataset[course]);
+      } else {
+        seenCourses[
+          dataset[course].Instructor + dataset[course]["Course Title"]
+        ] += 1;
+        dataset[course].gpa += condenseCourse(dataset[course]);
+        dataset[course].gpa /=
+          seenCourses[
+            dataset[course].Instructor + dataset[course]["Course Title"]
+          ];
+      }
     }
-
-    // console.log(dataset);
+    dataset = dataset2fuckyou;
 
     var svg = d3
       .select("#barchart")
@@ -100,7 +121,7 @@ function genProfChart(data, courseLevel) {
 
     var xLabel = svg
       .append("text")
-      .attr("x", dimensions.width / 2)
+      .attr("x", dimensions.width / 3)
       .attr("y", dimensions.height - 10)
       .attr("text-anchor", "middle")
       .text(
@@ -144,8 +165,8 @@ function genProfChart(data, courseLevel) {
         var text = svg
           .append("text")
           .attr("id", "topbartext")
-          .attr("x", dimensions.width / 5)
-          .attr("y", 20)
+          .attr("x", dimensions.width - 400)
+          .attr("y", dimensions.height - 10)
           .attr("font-family", "times")
           .text("Course: " + i["Course Title"]);
       })

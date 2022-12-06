@@ -74,7 +74,7 @@ function genLevelChart(semNum, selectedCourse) {
       width: size / 2,
       height: size / 3,
       margin: {
-        top: 10,
+        top: 20,
         right: 10,
         bottom: 100,
         left: 100,
